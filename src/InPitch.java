@@ -1,6 +1,6 @@
 /*
 InPitch - a simple ear-training program for note recognition.
-Copyright (C) 2006 Chris Gilbreth, Hector Parra
+Copyright (C) 2006, 2016 Chris Gilbreth, Hector Parra
 
 This program is free software; you can redistribute it and/or
 modify it under the terms of the GNU General Public License
@@ -51,14 +51,14 @@ public class InPitch
 	{
 		WaveBank set = new WaveBank();
 		SoundTrainer trainer = new SoundTrainer();
-		//        set.load("test.set"); 
+		//        set.load("test.set");
 		//
 		InPitchMain inPitchMain = new InPitchMain(trainer);
 
-		int width = 300;
-		int height = 270;
+		int width = 350;
+		int height = 260;
 		Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
-		
+
 		JFrame.setDefaultLookAndFeelDecorated(true);
 		inPitchMain.setLocation(
 			screenSize.width / 2 - width / 2,

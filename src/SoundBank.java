@@ -1,6 +1,6 @@
-/* 
+/*
 This file is a part of InPitch - a simple ear-training program
-for note recognition. Copyright (C) 2006 Chris Gilbreth, Hector Parra.
+for note recognition. Copyright (C) 2006, 2016 Chris Gilbreth, Hector Parra.
 
 See the file InPitch.java and COPYING.txt for further copyright and
 contact information.
