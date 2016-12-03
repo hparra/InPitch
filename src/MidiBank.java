@@ -6,18 +6,14 @@
    contact information.
 */
 
-//import java.awt.*;
 import java.awt.event.*;
 import javax.swing.*;
-//import javax.swing.event.*;
 import javax.sound.midi.spi.*;
 import javax.sound.midi.*;
 import java.util.*;
 import java.net.URL;
 import java.net.URI;
 import java.io.*;
-//import java.io.File;
-//import java.io.IOException;
 
 public class MidiBank implements SoundBank
 {
@@ -53,11 +49,14 @@ public class MidiBank implements SoundBank
 
     Random random;
 
+    PlayThread playthread;
+
     public MidiBank(InPitchMain inpitch)
     {
 	ipm = inpitch;
 	random = new Random();
 	currentKeys = new Vector();
+	playthread = new PlayThread(1);
     }
 
     public void open() throws SoundbankException
@@ -181,27 +180,30 @@ public class MidiBank implements SoundBank
 
 	public void run()
 	{
-	    try
-		{
-		    currentChannel.channel.noteOn(key, currentChannel.velocity);
-		    Thread.sleep(6000);
-		    currentChannel.channel.noteOff(key, currentChannel.velocity);
-		}
-	    catch (InterruptedException ex)
-		{
-		    currentChannel.channel.noteOff(key, currentChannel.velocity);
-		    System.err.println("PlayThread interrupted prematurely...");
-		    System.out.println("PlayThread interrupted prematurely...");
-		}
+	    try {
+		currentChannel.channel.noteOn(key, currentChannel.velocity);
+		Thread.sleep(10000);
+		currentChannel.channel.noteOff(key, currentChannel.velocity);
+	    }
+	    catch (InterruptedException ex) {
+		currentChannel.channel.noteOff(key, currentChannel.velocity);
+	    }
 	}
     }
 
-    private void playNote(int key)
+    private void playNote(int key) 
     {
-	currentChannel.channel.allNotesOff();
+	if (playthread.isAlive()) {
+	    playthread.interrupt();
+	    try {
+	    	playthread.join();
+	    }
+	    catch (InterruptedException ex) {
+	    }
+	}
+	playthread = new PlayThread(key);
+	playthread.start();
 	lastKey = key;
-	PlayThread thread = new PlayThread(key);
-	thread.start();
     }
 
     public JMenu createMidiMenu(ButtonGroup group)
@@ -264,8 +266,7 @@ public class MidiBank implements SoundBank
 		midiMenu.add(menuItem);
 	    }
 	    catch (Exception e) {
-		System.err.println(
-				   "Exception caught: " + e.getMessage() + e.getStackTrace());
+		System.err.println("Exception caught: " + e.getMessage() + e.getStackTrace());
 	    }
 	    //midiMenu.add(subMenu);
 	}
