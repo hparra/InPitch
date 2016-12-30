@@ -1,23 +1,31 @@
 <project>
-    <target name="clean">
-        <delete dir="build"/>
-    </target>
+  <target name="clean">
+    <delete dir="build"/>
+  </target>
 
-    <target name="compile">
-        <mkdir dir="build/classes"/>
-        <javac srcdir="src" destdir="build/classes"/>
-    </target>
+  <target name="compile">
+    <mkdir dir="build/classes"/>
+    <javac srcdir="src" destdir="build/classes"/>
+  </target>
 
-    <target name="jar">
-        <mkdir dir="build/jar"/>
-        <jar destfile="build/jar/InPitch.jar" basedir="build/classes">
-            <manifest>
-                <attribute name="Main-Class" value="InPitch"/>
-            </manifest>
-        </jar>
-    </target>
-
-    <target name="run">
-        <java jar="build/jar/InPitch.jar" fork="true"/>
-    </target>
+  <target name="jar">
+    <mkdir dir="build/jar"/>
+    <!-- <exec executable="/bin/cat" output="resources/Nice-Keys-B-JNv1.5.sf2"> -->
+    <!--   <arg line="resources/Nice-Keys-B-JNv1.5.sf2.parta resources/Nice-Keys-B-JNv1.5.sf2.partb"/> -->
+    <!-- </exec> -->
+    <exec executable="/bin/bash">
+      <arg value="-c"/>
+      <arg value="cat resources/Nice-Keys-B-JNv1.5.sf2.parta resources/Nice-Keys-B-JNv1.5.sf2.partb > resources/Nice-Keys-B-JNv1.5.sf2"/>
+    </exec>
+    <jar destfile="build/jar/InPitch.jar" basedir="build/classes">
+      <manifest>
+	<attribute name="Main-Class" value="InPitch"/>
+      </manifest>
+      <fileset dir="resources" includes="*.sf2"/>
+    </jar>
+  </target>
+  
+  <target name="run">
+    <java jar="build/jar/InPitch.jar" fork="true"/>
+  </target>
 </project>
